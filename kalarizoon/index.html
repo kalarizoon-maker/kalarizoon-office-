@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>kalarizoon | Professional Platform</title>
+    <link rel="icon" type="image/png" href="logo/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo-section" id="logoHomeBtn">
+            <div class="brand-logo">
+                <img src="unnamed.png" alt="kalarizoon" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="logo"><span class="brand-name">kalarizoon</span></div>
+        </div>
+        <div class="nav-center">
+            <div class="coin-box" id="coinBoxBtn">
+                <i class="fas fa-coins"></i>
+                <span class="coin-amount" id="coinAmount">0.0</span>
+                <span class="coin-label">BDT</span>
+            </div>
+        </div>
+        <div class="nav-right">
+            <button class="icon-btn publish-btn-top" id="topPublishBtn"><i class="fas fa-plus-circle"></i></button>
+            <div class="icon-btn" id="mailIconBtn"><i class="fas fa-envelope"></i></div>
+            <div class="notification-bell" id="notificationBell">
+                <i class="far fa-bell"></i>
+                <span id="notifBadge" class="badge-count" style="display: none;">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="mailMenu" class="mail-menu">
+        <div class="mail-header"><i class="fas fa-envelope"></i> Messages</div>
+        <div class="mail-list" id="mailList"><div class="mail-empty">No new messages</div></div>
+    </div>
+
+    <div id="coinPage" class="coin-page">
+        <div class="coin-page-header">
+            <span><i class="fas fa-coins"></i> kalarizoon Balance</span>
+            <span class="close-coin-btn" id="closeCoinBtn"><i class="fas fa-times"></i></span>
+        </div>
+        <div class="coin-page-content">
+            <div>Your Balance</div>
+            <div class="coin-balance-large" id="coinPageAmount">0.0</div>
+            <div class="coin-action-buttons">
+                <button class="coin-action-btn" id="withdrawCoinBtn"><i class="fas fa-money-bill-wave"></i> Withdraw</button>
+                <button class="coin-action-btn" id="sendMoneyCoinBtn"><i class="fas fa-paper-plane"></i> Send Money</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notificationsDropdown" class="notifications-dropdown">
+        <div class="notif-header">
+            <span><i class="fas fa-bell"></i> Notifications</span>
+            <span id="clearNotifBtn">Clear all</span>
+        </div>
+        <div id="notifListContainer" class="notif-list"></div>
+    </div>
+
+    <div id="editModal" class="edit-post-modal">
+        <h3>Edit Post</h3>
+        <input type="text" id="editAccount" placeholder="Account">
+        <input type="text" id="editPassword" placeholder="Password">
+        <button id="saveEditBtn" class="auth-btn">Save Changes</button>
+        <button id="closeEditBtn" class="auth-btn" style="background:#6c757d;">Cancel</button>
+    </div>
+
+    <div id="withdrawModal" class="withdraw-modal">
+        <h3>Withdraw Money</h3>
+        <input type="number" id="withdrawAmount" placeholder="Amount (BDT)" min="1">
+        <input type="text" id="withdrawCode" placeholder="6-digit code" maxlength="6">
+        <button id="confirmWithdrawBtn" class="auth-btn">Request Withdrawal</button>
+        <button id="closeWithdrawBtn" class="auth-btn" style="background:#6c757d;">Cancel</button>
+    </div>
+
+    <div id="sendMoneyModal" class="send-money-modal">
+        <h3>Send Money</h3>
+        <input type="text" id="sendToBkash" placeholder="Receiver Number">
+        <input type="number" id="sendAmount" placeholder="Amount (BDT)" min="1">
+        <button id="confirmSendBtn" class="auth-btn">Send Money</button>
+        <button id="closeSendBtn" class="auth-btn" style="background:#6c757d;">Cancel</button>
+    </div>
+
+    <div id="modalOverlay" class="modal-overlay"></div>
+    <div id="profileViewModal" class="profile-view-modal">
+        <h3>User Profile</h3>
+        <div id="profileViewContent"></div>
+        <button id="closeProfileViewBtn" class="auth-btn" style="background:#6c757d;">Close</button>
+    </div>
+
+    <div class="main-container">
+        <div id="loginPage" class="auth-card">
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Sign in to your account</p>
+            
+            <div id="googleLoginBtn" class="google-btn">
+                <i class="fab fa-google"></i> Continue with Google
+            </div>
+            
+            <div class="divider"><span>or</span></div>
+            
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="text" id="loginEmail" placeholder="Email or Phone Number">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button class="toggle-password" onclick="togglePassword('loginPassword')"><i class="fas fa-eye-slash"></i></button>
+            </div>
+            <div id="loginError" class="error-message"></div>
+            <button class="auth-btn" id="loginBtn">Sign In</button>
+            <div class="auth-switch" id="gotoSignupBtn">Don't have an account? <span>Create Account</span></div>
+        </div>
+
+        <div id="signupPage" class="auth-card hidden">
+            <h2>Create Account</h2>
+            <p class="subtitle">Join kalarizoon today</p>
+            
+            <div id="googleSignupBtn" class="google-btn">
+                <i class="fab fa-google"></i> Sign up with Google
+            </div>
+            
+            <div class="divider"><span>or</span></div>
+            
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="signupName" placeholder="Full Name">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="signupEmail" placeholder="Email Address">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-mobile-alt"></i>
+                <input type="text" id="signupNumber" placeholder="Phone Number">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="signupPassword" placeholder="Password">
+                <button class="toggle-password" onclick="togglePassword('signupPassword')"><i class="fas fa-eye-slash"></i></button>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-key"></i>
+                <input type="text" id="signupWithdrawCode" maxlength="6" placeholder="Withdrawal Code (6 digits)">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-gift"></i>
+                <input type="text" id="signupReferral" placeholder="Referral Code (optional)">
+            </div>
+            <div id="signupError" class="error-message"></div>
+            <button class="auth-btn" id="signupBtn">Sign Up</button>
+            <div class="auth-switch" id="gotoLoginBtn">Already have an account? <span>Sign In</span></div>
+        </div>
+
+        <div id="appContent" class="hidden">
+            <div class="publish-card" id="publishPage">
+                <div class="publish-header-line">
+                    <div class="create-post-title-small"><i class="fas fa-pen-fancy"></i> CREATE POST</div>
+                </div>
+                <div id="inputSetsContainer" class="input-sets-container"></div>
+                <button class="submit-post-btn" id="submitPostBtn"><i class="fas fa-paper-plane"></i> SUBMIT FOR APPROVAL</button>
+                <div id="publishStatus" class="status-panel"><i class="fas fa-info-circle"></i><span>Gmail: 3 BDT | Instagram: 4 BDT (Added after approval)</span></div>
+            </div>
+
+            <div id="homePage" class="home-card hidden">
+                <div class="create-post-card" id="createPostCard">
+                    <div class="avatar" id="homeAvatar"><i class="fas fa-user"></i></div>
+                    <div class="create-post-input">Share your account details...</div>
+                </div>
+                <div id="postsFeed"><div class="empty-state-centered">No approved posts in last 24 hours</div></div>
+            </div>
+
+            <div id="historyPage" class="home-card hidden">
+                <div class="history-header">
+                    <h2><i class="fas fa-history"></i> Post History</h2>
+                    <div class="history-buttons">
+                        <button class="history-btn active" id="myHistoryBtn">My History</button>
+                        <button class="history-btn" id="allHistoryBtn">All Posts</button>
+                    </div>
+                </div>
+                <div id="historyFeed"><div class="empty-state-centered">No posts yet</div></div>
+            </div>
+
+            <div id="profilePage" class="home-card hidden">
+                <div class="profile-container">
+                    <div class="profile-avatar-section">
+                        <div class="profile-avatar-upload" id="avatarUploadContainer">
+                            <div id="profileAvatarPreview" class="avatar-placeholder"><i class="fas fa-user-circle"></i></div>
+                        </div>
+                        <div class="profile-edit-icon" id="editProfileIconBtn"><i class="fas fa-camera"></i></div>
+                        <input type="file" id="avatarInput" style="display:none" accept="image/*">
+                    </div>
+                    <h2 id="profileName">User</h2>
+                    <p id="profileEmail"></p>
+                    <p id="profileBkash"></p>
+                    
+                    <div class="withdrawal-code-section">
+                        <i class="fas fa-key"></i>
+                        <strong>Your Withdrawal Code</strong>
+                        <div class="withdrawal-code-display" id="profileWithdrawCodeDisplay">------</div>
+                        <button class="copy-code-btn" id="copyWithdrawCodeBtn"><i class="fas fa-copy"></i> Copy Code</button>
+                    </div>
+                    
+                    <div class="profile-stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="stat-number" id="profileTotalPosts">0</div>
+                            <div class="stat-label">Total Posts</div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-coins"></i>
+                            <div class="stat-number" id="profileEarnedCoins">0</div>
+                            <div class="stat-label">Earned BDT</div>
+                        </div>
+                    </div>
+                    
+                    <div class="total-coins-card">
+                        <div><i class="fas fa-coins"></i> Total Balance</div>
+                        <strong id="profileCoinAmount">0</strong>
+                    </div>
+                    
+                    <button class="logout-btn-new" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+
+            <div id="usersPage" class="home-card hidden">
+                <div class="users-container">
+                    <h3><i class="fas fa-users"></i> All Users</h3>
+                    <div class="users-search-bar">
+                        <input type="text" id="searchUserInput" placeholder="Search by name or number...">
+                        <button id="searchUserBtn"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                    <div id="usersListContainer" class="users-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <button class="bottom-nav-btn" id="bottomHomeBtn"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="bottom-nav-btn" id="bottomHistoryBtn"><i class="fas fa-history"></i><span>History</span></button>
+        <button class="bottom-nav-btn" id="bottomProfileBtn"><i class="fas fa-user"></i><span>Profile</span></button>
+        <button class="bottom-nav-btn" id="bottomUsersBtn"><i class="fas fa-users"></i><span>Users</span></button>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPageContainer" class="admin-page-container">
+        <div class="admin-navbar">
+            <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
+            <div class="admin-nav-links">
+                <button class="admin-nav-link active" data-admin-page="dashboard"><i class="fas fa-home"></i> Dashboard</button>
+                <button class="admin-nav-link" data-admin-page="pending"><i class="fas fa-clock"></i> Pending <span class="pending-badge" id="pendingCount">0</span></button>
+                <button class="admin-nav-link" data-admin-page="approved"><i class="fas fa-check-circle"></i> Approved</button>
+                <button class="admin-nav-link" data-admin-page="rejected"><i class="fas fa-times-circle"></i> Rejected</button>
+                <button class="admin-nav-link" data-admin-page="payusers"><i class="fas fa-money-bill-wave"></i> Pay Users</button>
+                <button class="admin-nav-link" data-admin-page="users"><i class="fas fa-users"></i> Users</button>
+                <button class="admin-nav-link" data-admin-page="withdrawals"><i class="fas fa-hand-holding-usd"></i> Withdrawals</button>
+                <button class="admin-nav-link" data-admin-page="sendmoney"><i class="fas fa-paper-plane"></i> Send Money</button>
+                <button class="admin-nav-link" data-admin-page="notifications"><i class="fas fa-bell"></i> Notifications</button>
+            </div>
+            <button class="close-admin-btn" id="closeAdminPageBtn"><i class="fas fa-sign-out-alt"></i> Logout & Close</button>
+        </div>
+        <div class="admin-page-content" id="adminPageContent">
+            <!-- Dashboard Page -->
+            <div id="adminDashboardPage" class="admin-page-card">
+                <h3><i class="fas fa-chart-pie"></i> Dashboard Overview</h3>
+                <div id="adminStats"></div>
+                <div class="admin-stats-grid">
+                    <div class="admin-stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-number" id="dashPendingCount">0</div>
+                        <div class="stat-label">Pending Posts</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="stat-number" id="dashApprovedCount">0</div>
+                        <div class="stat-label">Approved</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <i class="fas fa-times-circle"></i>
+                        <div class="stat-number" id="dashRejectedCount">0</div>
+                        <div class="stat-label">Rejected</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pending Posts Page -->
+            <div id="adminPendingPage" class="admin-page-card" style="display:none;">
+                <h3><i class="fas fa-clock"></i> Pending Posts</h3>
+                <div class="admin-search-bar">
+                    <input type="text" id="pendingSearchInput" placeholder="Search by email/username...">
+                    <button id="pendingSearchBtn"><i class="fas fa-search"></i> Search All</button>
+                </div>
+                <div id="pendingPostsList"></div>
+            </div>
+            
+            <!-- Approved Posts Page -->
+            <div id="adminApprovedPage" class="admin-page-card" style="display:none;">
+                <h3><i class="fas fa-check-circle"></i> Approved History</h3>
+                <div class="admin-search-bar">
+                    <input type="text" id="approvedSearchInput" placeholder="Search by email/username...">
+                    <button id="approvedSearchBtn"><i class="fas fa-search"></i> Search</button>
+                </div>
+                <div id="approvedPostsList"></div>
+            </div>
+            
+            <!-- Rejected Posts Page -->
+            <div id="adminRejectedPage" class="admin-page-card" style="display:none;">
+                <h3><i class="fas fa-times-circle"></i> Rejected History</h3>
+                <div class="admin-search-bar">
+                    <input type="text" id="rejectedSearchInput" placeholder="Search by email/username...">
+                    <button id="rejectedSearchBtn"><i class="fas fa-search"></i> Search</button>
+                </div>
+                <div id="rejectedPostsList"></div>
+            </div>
+            
+            <!-- Pay Users Page -->
+            <div id="adminPayUsersPage" class="admin-page-card" style="display:none;">
+                <h3><i class="fas fa-money-bill-wave"></i> Pay User List</h3>
+                <div class="pay-tabs">
+                    <button class="pay-tab active" id="payUserListTab">User List</button>
+                    <button class="pay-tab" id="payHistoryTab">Success History</button>
+                </div>
+                <div id="payUserListContainer">
+                    <div class="admin-search-bar">
+                        <input type="text" id="payUserSearchInput" placeholder="Search by name or number...">
+                        <button id="payUserSearchBtn"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                    <div id="payUserList"></div>
+                </div>
+                <div id="payHistoryContainer" style="display:none;">
+                    <div id="payHistoryList"></div>
+                </div>
+            </div>
+            
+            <!-- Users Page -->
+            <div id="adminUsersPage" class="admin-page-card" style="display:none;">
+                <h3><i class="fas fa-users-cog"></i> User Management</h3>
+                <div class="admin-search-bar">
+                    <input type="text" id="adminUserSearchInput" placeholder="Search by email or number...">
+                    <button id="adminUserSearchBtn"><i class="fas fa-search"></i> Search</button>
+                </div>
+                <div id="adminUsersList"></div>
+            </div>
+            
+            <!-- Withdrawals Page -->
+            <div id="adminWithdrawalsPage" class="admin-page-card" style="display:none;">
+                <h3><i class="fas fa-hand-holding-usd"></i> Withdrawal Requests</h3>
+                <div id="withdrawalsList"></div>
+            </div>
+            
+            <!-- Send Money Page -->
+            <div id="adminSendMoneyPage" class="admin-page-card" style="display:none;">
+                <h3><i class="fas fa-paper-plane"></i> Send Money to Users</h3>
+                <div class="admin-form">
+                    <input type="text" id="adminSendBkash" placeholder="User Number">
+                    <input type="number" id="adminSendAmount" placeholder="Amount (BDT)">
+                    <button onclick="adminSendMoneyToUser()" class="admin-btn-sm success"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
+            </div>
+            
+            <!-- Notifications Page -->
+            <div id="adminNotificationsPage" class="admin-page-card" style="display:none;">
+                <h3><i class="fas fa-bell"></i> Send Notification</h3>
+                <div class="admin-form">
+                    <input type="text" id="adminNotifBkash" placeholder="Specific Number (leave empty for all)">
+                    <textarea id="adminNotifMessage" rows="3" placeholder="Message"></textarea>
+                    <button onclick="adminSendNotification()" class="admin-btn-sm success"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
