@@ -1,0 +1,14 @@
+{
+  "name": "kalarizoon",
+  "version": "2.0.0",
+  "description": "Professional Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0",
+    "google-auth-library": "^9.0.0"
+  }
+}
